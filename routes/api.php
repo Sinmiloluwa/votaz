@@ -22,15 +22,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->group(function(){
-    Route::post('vote/{category}/{nominee}', [VotingController::class, 'vote']);
-    // Laravel 8
-    Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
-    // Laravel 8
-    Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
+// Route::middleware('auth:api')->group(function(){
+//     Route::post('vote/{category}/{nominee}', [VotingController::class, 'vote']);
+//     // Laravel 8
+//     Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
+//     // Laravel 8
+//     Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 
 
-});
+// });
 
 Route::post('/register',[UserAuthController::class,'register']);
 Route::post('login',[UserAuthController::class,'login']);

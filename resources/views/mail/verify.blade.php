@@ -3,7 +3,7 @@
 
 Kindly click the button below to verify your email
 
-@component('mail::button', ['url' => $details['url']])
+@component('mail::button', ['url' => $details['url'],'color' => 'success'])
 Verify
 @endcomponent
 
