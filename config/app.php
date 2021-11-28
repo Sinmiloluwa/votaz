@@ -167,6 +167,8 @@ return [
          */
         KingFlamez\Rave\RaveServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
+        Unicodeveloper\Paystack\PaystackServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -232,6 +234,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
 
     ],
 

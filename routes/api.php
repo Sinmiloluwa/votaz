@@ -21,9 +21,19 @@ use App\Http\Controllers\User\UserAuthController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware('auth:api')->group(function(){
+    Route::post('vote/{category}/{nominee}', [VotingController::class, 'vote']);
+    // Laravel 8
+    Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
+    // Laravel 8
+    Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
+
+
+});
+
 Route::post('/register',[UserAuthController::class,'register']);
 Route::post('login',[UserAuthController::class,'login']);
-Route::post('vote/{category}/{nominee}', [VotingController::class, 'vote']);
 Route::get('categories',[VotingController::class, 'getCategories']);
 Route::get('categories/{id}',[VotingController::class, 'categoryView']);
 Route::get('nominee/{id}',[VotingController::class, 'nomineeDetails']);
@@ -34,9 +44,17 @@ Route::get('pricing/{id}',[VotingController::class, 'pay']);
 Route::post('search',[VotingController::class, 'search']);
 Route::get('verify/mail/{token}', [UserAuthController::class, 'verifyEmail']);
 Route::get('email/resend', [VotingController::class, 'resend']);
-// The route that the button calls to initialize payment
-Route::post('/pay', [FlutterwaveController::class, 'initialize']);
-// The callback url after a payment
-Route::get('/rave/callback', [FlutterwaveController::class, 'callback'])->name('callback');
 Route::get('login/{provider}', [SocialController::class,'redirect']);
 Route::get('login/{provider}/callback', [SocialController::class,'callback']);
+
+Route::get('send-mail', function () {
+   
+    $details = [
+        'title' => 'Mail from ItSolutionStuff.com',
+        'body' => 'This is for testing email using smtp'
+    ];
+   
+    \Mail::to('emmasimons141@gmail.com')->send(new \App\Mail\TestMail($details));
+   
+    dd("Email is Sent.");
+});

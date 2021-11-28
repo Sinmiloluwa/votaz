@@ -10,9 +10,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
+
 
 class UserAuthController extends Controller
 {
+    use AuthenticatesUsers;
+
     public function register(Request $request)
     {
         $data = $request->all();
@@ -52,11 +57,11 @@ class UserAuthController extends Controller
             
             $details = [
                 'email' => $user->email,
-                'url' =>  'https://google.com/verify/email/'.$data['email_verify_token'],
+                'url' =>  'https://votaz.herokuapp.com/verify/mail/'.$data['email_verify_token'],
                 //'firstname' => $user->firstname
             ];
 
-            \Mail::to($user->email)->send(new \App\Mail\VerifyMail($details));
+            \Mail::to($user->email)->send(new \App\Mail\VerificationMail($details));
 
             return response()->json([
                 'message' => 'Registration Successful',
@@ -106,10 +111,11 @@ class UserAuthController extends Controller
             return response()->json([
                 'message' => 'Invalid Credentials'
             ],401);
-        };
+        }
         $user = auth()->user();
-        // $accessToken = $user->createToken('authToken')->accessToken;
 
+        $accessToken = $user->createToken('authToken')->accessToken;
+       
         // if(Auth::user()->role_id == 1)
         //     {
         //         return response()->json([
@@ -122,12 +128,7 @@ class UserAuthController extends Controller
 
         //     else
         //     {
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Login successful',
-                    'user' => $user,
-                    // 'accessToken' => $accessToken
-                ],202);
+            return response(['user' => auth()->user(), 'token' => $accessToken]);
             // }
     }
 

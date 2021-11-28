@@ -22,7 +22,24 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/pay', [FlutterwaveController::class, 'initialize'])->name('pay');
+// Route::post('/pay', [FlutterwaveController::class, 'initialize'])->name('pay');
 Route::get('/rave/callback', [FlutterwaveController::class, 'callback'])->name('callback');
 Route::get('login/{provider}', [SocialController::class,'redirect']);
+Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
+Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
 
+Route::get('send-mail', function () {
+   
+    $details = [
+        'title' => 'Mail from ItSolutionStuff.com',
+        'body' => 'This is for testing email using smtp'
+    ];
+   
+    \Mail::to('emmasimons141@gmail.com')->send(new \App\Mail\TestMail($details));
+   
+    dd("Email is Sent.");
+});
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
