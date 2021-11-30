@@ -1,7 +1,9 @@
 @component('mail::message')
 # Email Verification
 
-Kindly click the button below to verify your email
+<b>Hello, you're a click away</b><br>
+
+Kindly click the button below to verify your email and start voting
 
 @component('mail::button', ['url' => $details['url'],'color' => 'success'])
 Verify

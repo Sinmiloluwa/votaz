@@ -40,6 +40,8 @@ Route::get('send-mail', function () {
     dd("Email is Sent.");
 });
 
+Route::get('verify/mail/{token}', [UserAuthController::class, 'verifyEmail']);
+
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });

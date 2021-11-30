@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Mail\VerifyMail;
+use App\Jobs\VerifyEmailJob;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +62,7 @@ class UserAuthController extends Controller
                 //'firstname' => $user->firstname
             ];
 
+            
             \Mail::to($user->email)->send(new \App\Mail\VerificationMail($details));
 
             return response()->json([

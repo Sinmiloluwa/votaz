@@ -22,7 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware('auth:api')->group(function(){
+Route::group(['middleware' => ['auth','auth.admin']], function() {
+     
+});
+
+Route::middleware(['auth:api','verified'])->group(function(){
     Route::post('vote/{category}/{nominee}', [VotingController::class, 'vote']);
     // Laravel 8
     Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
@@ -50,10 +54,11 @@ Route::get('login/{provider}/callback', [SocialController::class,'callback']);
 Route::get('send-mail', function () {
    
     $details = [
-        'title' => 'Mail from ItSolutionStuff.com',
+        'title' => 'Verification Email',
         'body' => 'This is for testing email using smtp'
     ];
-   
+    
+    
     \Mail::to('emmasimons141@gmail.com')->send(new \App\Mail\TestMail($details));
    
     dd("Email is Sent.");
