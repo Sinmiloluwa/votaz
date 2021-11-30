@@ -58,7 +58,7 @@ class UserAuthController extends Controller
             
             $details = [
                 'email' => $user->email,
-                'url' =>  'https://votaz.herokuapp.com/verify/mail/'.$data['email_verify_token'],
+                'url' =>  'https://votaz.herokuapp.com/api/verify/mail/'.$data['email_verify_token'],
                 //'firstname' => $user->firstname
             ];
 
