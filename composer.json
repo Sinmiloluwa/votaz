@@ -17,7 +17,8 @@
         "laravel/ui": "^3.3",
         "protonemedia/laravel-cross-eloquent-search": "^2.4",
         "tcg/voyager": "^1.5",
-        "unicodeveloper/laravel-paystack": "^1.0"
+        "unicodeveloper/laravel-paystack": "^1.0",
+        "ext-gd": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
