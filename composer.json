@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-exif": "*",
+        "ext-gd": "*",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "kingflamez/laravelrave": "^4.2",
@@ -17,9 +19,7 @@
         "laravel/ui": "^3.3",
         "protonemedia/laravel-cross-eloquent-search": "^2.4",
         "tcg/voyager": "^1.5",
-        "unicodeveloper/laravel-paystack": "^1.0",
-        "ext-gd": "*",
-        "ext-exif":"*"
+        "unicodeveloper/laravel-paystack": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
