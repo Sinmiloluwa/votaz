@@ -23,18 +23,18 @@ class VotingController extends Controller
         ],200);
     }
 
-    public function getExceptional()
+    public function getIndividual()
     {
-        $exceptional = DB::table('sub_categories')->where('category_id',2)->get();
+        $exceptional = DB::table('sub_categories')->where('category_id',1)->get();
         return response()->json([
             'data' => $exceptional,
             'status' => 'success'
         ],200);
     }
 
-    public function getPromising()
+    public function getCompany()
     {
-        $promising = DB::table('sub_categories')->where('category_id',1)->get();
+        $promising = DB::table('sub_categories')->where('category_id',2)->get();
         return response()->json([
             'data' => $promising,
             'status' => 'success'
@@ -62,31 +62,40 @@ class VotingController extends Controller
 
     public function vote(Request $request,$sub_category_id,$nominee_id)
     {
-        $voting_power = User::where('id',1)->value('voting_power');
-        if ($request->points > $voting_power ) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Not enough voting power',
-        ],400);
-        }
+        $voting_power = User::where('id',auth()->user()->id)->value('voting_power');
         // Check if user has voted in that category initially
-        else {
-            if (Vote::where('user_id',1)->where('sub_category_id',1)->exists()) {
-                return response()->json([
-                    'message' => 'You can only vote one person in a category'
-                ]);
+            if (Vote::where('user_id',auth()->user()->id)->where('sub_category_id',1)->exists()) {
+
+                if ($voting_power < $request->points) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Not enough voting power',
+                ],400);
+                } elseif ($voting_power >= $request->points) {
+                    DB::table('users')->where('id',auth()->user()->id)->update([
+                        'voting_power' => $voting_power - $request->points
+                    ]);
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'vote Successful',
+                ],202);
+                }
+               
             }
             else {
                 $vote = new Vote;
                 $vote->nominee_id = $nominee_id;
                 $vote->vote_amount = $request->points;
-                $vote->user_id = 1;
+                $vote->user_id = auth()->user()->id;
                 $vote->sub_category_id = $sub_category_id;
                 $vote->save();
 
-                
+            $amount = $vote->vote_amount;    
+
+            $points = $request->points;
+
             DB::table('nominees')->update([
-                'votes' => $request->points
+                'votes' => $amount + $points
             ]);
 
             return response()->json([
@@ -94,7 +103,7 @@ class VotingController extends Controller
                 'status' => 'success'
             ]);
 
-            }
+            
 
             
         }
@@ -108,11 +117,22 @@ class VotingController extends Controller
 
     public function search(Request $request)
     {
-        $results = Search::addMany([
-            [SubCategory::class, 'name'],
-            [Nominee::class, 'firstname','lastname'],
-        ])->get($request->search);
-        dd($results);
+        if ($request->search != '') {
+            $results = Search::addMany([
+                [SubCategory::class, 'name'],
+                [Nominee::class, 'firstname','lastname'],
+            ])->beginWithWildcard()->dontParseTerm()->get($request->search);
+            return response()->json([
+                'data' => $results,
+                'status' => 'success'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Cannot be empty'
+            ]);
+        }
+       
     }
 
     public function pricing()
@@ -124,12 +144,23 @@ class VotingController extends Controller
         ],200);
     }
 
-    public function pay($id)
+    public function pricingDetail($id)
     {
-        $amount = DB::table('pricing')->where('id',$id)->value('price');
+        $amount = DB::table('pricing')->where('id',$id)->get();
         return response()->json([
             'data' => $amount,
-            'status' => 'success'
+            'status' => 'success',
         ],200);
     }
+
+    // public function pay($id)
+    // {
+    //     $amount = DB::table('pricing')->where('id',$id)->value('price');
+    //     $user = DB::table('users')->where('id',auth()->user()->id)->get();
+    //     return response()->json([
+    //         'amount' => $amount,
+    //         'status' => 'success',
+    //         'user' => $user
+    //     ],200);
+    // }
 }

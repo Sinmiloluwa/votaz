@@ -169,6 +169,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Laravel\Passport\PassportServiceProvider::class,
         Unicodeveloper\Paystack\PaystackServiceProvider::class,
+        MadeITBelgium\EmailDomainValidation\EmailDomainServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -235,6 +236,7 @@ return [
         'Rave' => KingFlamez\Rave\Facades\Rave::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
+        'EmailDomainValidation' => TPWeb\EmailDomainValidation\EmailDomainFacade::class,
 
     ],
 

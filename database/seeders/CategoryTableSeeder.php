@@ -17,16 +17,12 @@ class CategoryTableSeeder extends Seeder
         DB::table('categories')->insert([
             [
                 'id' => 1,
-                'name' => 'promising'
+                'name' => 'Individual'
             ],
             [
                 'id' => 2,
-                'name' => 'exceptional'
+                'name' => 'Organization'
             ],
-            [
-                'id' => 3,
-                'name' => 'others'
-            ]
         ]);
     }
 }

@@ -32,7 +32,7 @@ Route::middleware(['auth:api','verified'])->group(function(){
     Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
     // Laravel 8
     Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
-
+    Route::get('pay/{id}',[VotingController::class, 'pay']);
 
 });
 
@@ -41,15 +41,16 @@ Route::post('login',[UserAuthController::class,'login']);
 Route::get('categories',[VotingController::class, 'getCategories']);
 Route::get('categories/{id}',[VotingController::class, 'categoryView']);
 Route::get('nominee/{id}',[VotingController::class, 'nomineeDetails']);
-Route::get('exceptional',[VotingController::class, 'getExceptional']);
-Route::get('promising',[VotingController::class, 'getPromising']);
+Route::get('individual',[VotingController::class, 'getIndividual']);
+Route::get('company',[VotingController::class, 'getCompany']);
 Route::get('pricing',[VotingController::class, 'pricing']);
-Route::get('pricing/{id}',[VotingController::class, 'pay']);
+Route::get('pricing/{id}',[VotingController::class, 'pricingDetail']);
 Route::post('search',[VotingController::class, 'search']);
 Route::get('verify/mail/{token}', [UserAuthController::class, 'verifyEmail']);
 Route::get('email/resend', [VotingController::class, 'resend']);
 Route::get('login/{provider}', [SocialController::class,'redirect']);
 Route::get('login/{provider}/callback', [SocialController::class,'callback']);
+
 
 Route::get('send-mail', function () {
    

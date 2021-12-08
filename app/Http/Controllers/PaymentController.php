@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Paystack;
+use Carbon\Carbon;
+use App\Models\Payment;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
 class PaymentController extends Controller
@@ -14,11 +16,16 @@ class PaymentController extends Controller
      */
     public function redirectToGateway()
     {
-        try{
-            return Paystack::getAuthorizationUrl()->redirectNow();
-        }catch(\Exception $e) {
-            return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
-        }        
+        // try{
+        //     return Paystack::getAuthorizationUrl()->redirectNow();
+        // }catch(\Exception $e) {
+        //     return Redirect::back()->withMessage(['msg'=>'The paystack token has expired. Please refresh the page and try again.', 'type'=>'error']);
+        // }   
+        
+        return response()->json([
+            'data' => auth()->user(),
+            'message' => 'redirect to payastack'
+        ]);
     }
 
     /**
@@ -29,7 +36,22 @@ class PaymentController extends Controller
     {
         $paymentDetails = Paystack::getPaymentData();
 
-        dd($paymentDetails);
+        $data = $paymentDetails['data'];
+
+        $amount = $data['amount']/ 100;
+
+        $payment = new Payment;
+        $payment->user_id = auth()->user()->id;
+        $payment->amount = $amount;
+        $payment->txn_id = $data['reference'];
+        $payment->paid_at = $data['paidAt'];
+
+        $payment->save();
+        $user_id = auth()->user()->id;
+        $voting_power = User::where('id',$user_id)->value('voting_power');
+        $user = DB::table('users')->update([
+            'voting_power' => 
+        ]);
         // Now you have the payment details,
         // you can store the authorization_code in your db to allow for recurrent subscriptions
         // you can then redirect or do whatever you want

@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PricingTableSeeder::class);
         $this->call(CategoryTableSeeder::class);
         $this->call(SubCategoryTableSeeder::class);
+        $this->call(PostSeeder::class);
+        $this->call(Nominee::class);
     }
 }

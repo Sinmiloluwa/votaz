@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 
-class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
+class User extends \TCG\Voyager\Models\User
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -29,6 +29,10 @@ class User extends \TCG\Voyager\Models\User implements MustVerifyEmail
         'provider', 
         'provider_id',
         'role_id',
+    ];
+
+    protected $attributes = [
+        'default_votes' => 1
     ];
 
     /**

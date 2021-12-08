@@ -15,8 +15,7 @@ class CreateNomineesTable extends Migration
     {
         Schema::create('nominees', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('name');
             $table->string('user_image')->nullable();
             $table->unsignedBigInteger('sub_category_id');
             $table->string('votes')->default(0);
