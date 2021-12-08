@@ -32,7 +32,7 @@ Route::middleware(['auth:api','verified'])->group(function(){
     Route::post('/pay', [App\Http\Controllers\PaymentController::class, 'redirectToGateway'])->name('pay');
     // Laravel 8
     Route::get('/payment/callback', [App\Http\Controllers\PaymentController::class, 'handleGatewayCallback']);
-    Route::get('pay/{id}',[VotingController::class, 'pay']);
+    Route::get('pay/{amount}',[VotingController::class, 'pay']);
     Route::get('votingPower', [VotingController::class,'getVotingPower']);
 
 });

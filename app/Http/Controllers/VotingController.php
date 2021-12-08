@@ -64,7 +64,7 @@ class VotingController extends Controller
     {
         $voting_power = User::where('id',auth()->user()->id)->value('voting_power');
         // Check if user has voted in that category initially
-            if (Vote::where('user_id',auth()->user()->id)->where('sub_category_id',1)->exists()) {
+            if (Vote::where('user_id',auth()->user()->id)->where('sub_category_id',$sub_category_id)->exists()) {
 
                 if ($voting_power < $request->points) {
                     return response()->json([
@@ -79,7 +79,7 @@ class VotingController extends Controller
                         'status' => 'success',
                         'message' => 'vote Successful',
                 ],202);
-                }
+                } 
                
             }
             else {
@@ -126,18 +126,24 @@ class VotingController extends Controller
         if ($request->search != '') {
             $results = Search::addMany([
                 [SubCategory::class, 'name'],
-                [Nominee::class, 'firstname','lastname'],
+                [Nominee::class, 'name'],
             ])->beginWithWildcard()->dontParseTerm()->get($request->search);
+            foreach ($results as $res) {
+                $id = $res->id;
+                $user = Nominee::where('sub_category_id',$id)->get();
             return response()->json([
-                'data' => $results,
+                'data' => $user,
                 'status' => 'success'
             ]);
+            }
+        //     
+        // 
         } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Cannot be empty'
-            ]);
-        }
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Cannot be empty'
+                ]);
+            }
        
     }
 
