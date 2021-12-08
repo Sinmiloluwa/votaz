@@ -38,6 +38,7 @@ class UserAuthController extends Controller
             }else{
                 $validator = Validator::make($request->all(),[
                     'email' => ['required','email'],
+                    'fullname' => 'required',
                     'phone_number' => 'required|digits:11',
                     'password' => [
                         'required',
@@ -60,6 +61,7 @@ class UserAuthController extends Controller
                         'email' => $data['email'],
                         'phone_number' => $data['phone_number'],
                         'password' => bcrypt($data['password']),
+                        'fullname' => $data['fullname'],
                         'role_id' => 2,
                         'sex' => $data['sex'],
                         'email_verify_token' => $data['email_verify_token'],

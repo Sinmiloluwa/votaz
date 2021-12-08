@@ -115,6 +115,12 @@ class VotingController extends Controller
         // $vote->vote_amount = 
     }
 
+    public function getVotingPower()
+    {
+        $voting_power = User::where('id',auth()->user()->id)->value('voting_power');
+        dd($voting_power);
+    }
+
     public function search(Request $request)
     {
         if ($request->search != '') {
